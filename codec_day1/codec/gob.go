@@ -39,7 +39,6 @@ func (c *GobCodec) Write (h *Header,body interface{}) (err error) {
 			_ = c.Close()
 		}
 	}()
-
 	if err := c.enc.Encode(h);err != nil {
 		log.Println("rpc codec: gob error encoding header:",err)
 		return err
@@ -51,8 +50,6 @@ func (c *GobCodec) Write (h *Header,body interface{}) (err error) {
 
 	return nil
 }
-
-
 
 var _ Codec = (*GobCodec)(nil)
 

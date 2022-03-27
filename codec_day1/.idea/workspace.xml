@@ -20,13 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a7decb5-08bf-407b-9f8d-b9d19b966287" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/GeekRPC.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec/codec.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec/gob.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/codec/gob.go" beforeDir="false" afterPath="$PROJECT_DIR$/codec/gob.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../mall/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../mall/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -63,18 +60,7 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager" selected="Go Test.TestNewServer in GeekRPC/codec_day1">
-    <configuration name="TestClient_Call in GeekRPC/client" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="GeekRPC" />
-      <working_directory value="$PROJECT_DIR$/client" />
-      <framework value="gotest" />
-      <kind value="PACKAGE" />
-      <package value="GeekRPC/client" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <pattern value="^\QTestClient_Call\E$" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Go Test.TestNewServer in GeekRPC">
     <configuration name="TestNewGobCodec in GeekRPC/codec" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="GeekRPC" />
       <working_directory value="$PROJECT_DIR$/codec" />
@@ -97,21 +83,8 @@
       <pattern value="^\QTestNewServer\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestNewServer in GeekRPC/codec_day1" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="GeekRPC" />
-      <working_directory value="$PROJECT_DIR$/codec_day1" />
-      <framework value="gotest" />
-      <kind value="PACKAGE" />
-      <package value="GeekRPC/codec_day1" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <pattern value="^\QTestNewServer\E$" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Test.TestNewServer in GeekRPC/codec_day1" />
-        <item itemvalue="Go Test.TestClient_Call in GeekRPC/client" />
         <item itemvalue="Go Test.TestNewServer in GeekRPC" />
         <item itemvalue="Go Test.TestNewGobCodec in GeekRPC/codec" />
       </list>
@@ -146,21 +119,32 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1648379886024" />
-    <state width="1323" height="275" key="GridCell.Tab.0.bottom" timestamp="1648398400411">
+    <state width="1323" height="138" key="GridCell.Tab.0.bottom" timestamp="1648386938032">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="275" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1648398400411" />
-    <state width="1323" height="275" key="GridCell.Tab.0.center" timestamp="1648398400410">
+    <state width="1323" height="138" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1648386938032" />
+    <state width="1323" height="138" key="GridCell.Tab.0.center" timestamp="1648386938032">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="275" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1648398400410" />
-    <state width="1323" height="275" key="GridCell.Tab.0.left" timestamp="1648398400410">
+    <state width="1323" height="138" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1648386938032" />
+    <state width="1323" height="138" key="GridCell.Tab.0.left" timestamp="1648386938031">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="275" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1648398400410" />
-    <state width="1323" height="275" key="GridCell.Tab.0.right" timestamp="1648398400411">
+    <state width="1323" height="138" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1648386938031" />
+    <state width="1323" height="138" key="GridCell.Tab.0.right" timestamp="1648386938032">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="275" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1648398400411" />
+    <state width="1323" height="138" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1648386938032" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/codec/gob_test.go</url>
+          <line>10</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
