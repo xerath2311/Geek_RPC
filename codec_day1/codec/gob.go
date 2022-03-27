@@ -34,6 +34,7 @@ func (c *GobCodec) Close() error{
 
 func (c *GobCodec) Write (h *Header,body interface{}) (err error) {
 	defer func(){
+		//buf的实例是基于conn的，所以这里的Flush就是把c.buf中的数据写入c.conn
 		_ = c.buf.Flush()
 		if err != nil {
 			_ = c.Close()
@@ -53,6 +54,7 @@ func (c *GobCodec) Write (h *Header,body interface{}) (err error) {
 
 var _ Codec = (*GobCodec)(nil)
 
+//这里输出Codec而不是*GobCodec,是为了 NewCodecFunc func(io.ReadWriteCloser)Codec 的多态
 func NewGobCodec(conn io.ReadWriteCloser)Codec{
 	buf := bufio.NewWriter(conn)
 	return &GobCodec{

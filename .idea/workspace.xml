@@ -20,13 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a7decb5-08bf-407b-9f8d-b9d19b966287" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/GeekRPC.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec/codec.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec/gob.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/codec_day1/codec/gob.go" beforeDir="false" afterPath="$PROJECT_DIR$/codec_day1/codec/gob.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../mall/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../mall/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -162,5 +157,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1323" height="275" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1648398400411" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1648403769398">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1648403769398" />
   </component>
 </project>
