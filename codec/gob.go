@@ -8,7 +8,7 @@ import (
 )
 
 type GobCodec struct {
-	conn io.ReadWriteCloser
+	conn io.ReadWriteCloser  //通过对conn的read和write实现与客户端通讯
 	buf *bufio.Writer
 	dec *gob.Decoder
 	enc *gob.Encoder
@@ -32,6 +32,7 @@ func (c *GobCodec) Close() error{
 	return c.conn.Close()
 }
 
+// 把h和body的内容写进buf，然后flush进conn中（就是相当于把内容发送给客户端）
 func (c *GobCodec) Write (h *Header,body interface{}) (err error) {
 	defer func(){
 		//buf的实例是基于conn的，所以这里的Flush就是把c.buf中的数据写入c.conn

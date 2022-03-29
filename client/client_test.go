@@ -1,7 +1,7 @@
 package client
 
 import (
-	"GeekRPC/codec_day1"
+	"GeekRPC/sever"
 	"fmt"
 	"log"
 	"net"
@@ -17,7 +17,7 @@ func startServer(addr chan string) {
 	}
 	log.Println("start rpc server on",l.Addr())
 	addr <- l.Addr().String()
-	codec_day1.Accept(l)
+	sever.Accept(l)
 }
 
 func TestClient_Call(t *testing.T) {
@@ -28,9 +28,9 @@ func TestClient_Call(t *testing.T) {
 	defer func() {
 		_ = client.Close()
 	}()
-
-	time.Sleep(time.Second)
-
+	log.Println("befor")
+	time.Sleep(time.Second * 3)
+	log.Println("after")
 	var wg sync.WaitGroup
 	for i:=0;i<5;i++{
 		wg.Add(1)

@@ -1,8 +1,9 @@
 package client
 
 import (
-	"GeekRPC/codec_day1"
-	"GeekRPC/codec_day1/codec"
+
+	"GeekRPC/codec"
+	"GeekRPC/sever"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -10,6 +11,7 @@ import (
 	"log"
 	"net"
 	"sync"
+	"time"
 )
 
 type Call struct {
@@ -27,7 +29,7 @@ func (call *Call) done() {
 
 type Client struct {
 	cc codec.Codec
-	opt *codec_day1.Option
+	opt *sever.Option
 	sending sync.Mutex
 	header codec.Header
 	mu sync.Mutex
@@ -100,23 +102,34 @@ func (client *Client) terminateCalls(err error) {
 	}
 }
 
+//解析conn的信息，并以Reply指针的形式把信息返回
 func (client *Client) receive() {
 	var err error
 	for err == nil {
+		log.Println("what happend ?")
 		var h codec.Header
+		t1 := time.Now()
 		if err = client.cc.ReadHeader(&h); err != nil {
 			break
 		}
+		log.Println(time.Since(t1).Seconds())
 
+		log.Println("what happend 111")
+		//处理该call，把call从client中清除
 		call := client.removeCall(h.Seq)
+		log.Println("what happend 222")
 		switch{
 		case call == nil:
+			log.Println("hello,anyone 111?")
 			err = client.cc.ReadBody(nil)
 		case h.Error != "":
+			log.Println("hello,anyone 222?")
 			call.Error = fmt.Errorf(h.Error)
 			err = client.cc.ReadBody(nil)
 			call.done()
 		default:
+			log.Println("hello,anyone 333?")
+			//这里的Reply是指针，当把conn的信息写进Reply时就已经把信息传递了出去
 			err = client.cc.ReadBody(call.Reply)
 			if err != nil {
 				call.Error = errors.New("reading body" + err.Error())
@@ -128,7 +141,7 @@ func (client *Client) receive() {
 	client.terminateCalls(err)
 }
 
-func NewClient(conn net.Conn,opt *codec_day1.Option) (*Client,error) {
+func NewClient(conn net.Conn,opt *sever.Option) (*Client,error) {
 	f := codec.NewCodecFuncMap[opt.CodecType]
 	if f == nil {
 		err := fmt.Errorf("invalid codec type %s",opt.CodecType)
@@ -145,7 +158,7 @@ func NewClient(conn net.Conn,opt *codec_day1.Option) (*Client,error) {
 	return newClientCodec(f(conn),opt),nil
 }
 
-func newClientCodec(cc codec.Codec,opt *codec_day1.Option) *Client {
+func newClientCodec(cc codec.Codec,opt *sever.Option) *Client {
 	client := &Client {
 		seq: 1,
 		cc: cc,
@@ -158,9 +171,9 @@ func newClientCodec(cc codec.Codec,opt *codec_day1.Option) *Client {
 	return client
 }
 
-func parseOption(opts ...*codec_day1.Option) (*codec_day1.Option,error){
+func parseOption(opts ...*sever.Option) (*sever.Option,error){
 	if len(opts) == 0 || opts[0] == nil {
-		return codec_day1.DefaultOption,nil
+		return sever.DefaultOption,nil
 	}
 
 	if len(opts) != 1{
@@ -168,15 +181,16 @@ func parseOption(opts ...*codec_day1.Option) (*codec_day1.Option,error){
 	}
 
 	opt := opts[0]
-	opt.MagicNumber = codec_day1.DefaultOption.MagicNumber
+	opt.MagicNumber = sever.DefaultOption.MagicNumber
 	if opt.CodecType == "" {
-		opt.CodecType = codec_day1.DefaultOption.CodecType
+		opt.CodecType = sever.DefaultOption.CodecType
 	}
 
 	return opt,nil
 }
 
-func Dial(network,address string,opts ...*codec_day1.Option)(client *Client,err error){
+// net.Dial(network,address),返回由conn和opts组成的client实例
+func Dial(network,address string,opts ...*sever.Option)(client *Client,err error){
 	opt,err := parseOption(opts...)
 	if err != nil {
 		return nil,err
@@ -195,6 +209,7 @@ func Dial(network,address string,opts ...*codec_day1.Option)(client *Client,err 
 	return NewClient(conn,opt)
 }
 
+//解析call的信息，并发送给服务端
 func (client *Client) send(call *Call) {
 	client.sending.Lock()
 	defer client.sending.Unlock()
@@ -219,6 +234,7 @@ func (client *Client) send(call *Call) {
 	}
 }
 
+//根据参数生产Call实例，并调用client.send将call信息发送给服务端，返回该call
 func (client *Client) Go(serviceMethod string,args,reply interface{},done chan *Call) *Call {
 	if done == nil {
 		done = make(chan *Call,10)
@@ -236,6 +252,7 @@ func (client *Client) Go(serviceMethod string,args,reply interface{},done chan *
 	return call
 }
 
+//调用client.Go产生的call，执行Done阻塞等待
 func (client *Client) Call(serviceMethod string,args,reply interface{}) error {
 	call := <- client.Go(serviceMethod,args,reply,make(chan *Call,1)).Done
 	return call.Error

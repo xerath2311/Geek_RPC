@@ -10,9 +10,9 @@ type Header struct {
 
 type Codec interface {
 	io.Closer
-	ReadHeader(*Header) error
-	ReadBody(interface{}) error
-	Write(*Header,interface{}) error
+	ReadHeader(*Header) error  // 把conn的内容解码储存到Header中
+	ReadBody(interface{}) error  // 把conn的内容解码储存到interface{}中
+	Write(*Header,interface{}) error  // 把Header和interface{}的内容写到conn中（就是相当于把内容发送给客户端）
 }
 
 type NewCodecFunc func(io.ReadWriteCloser)Codec

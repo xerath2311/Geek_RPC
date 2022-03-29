@@ -1,7 +1,7 @@
-package codec_day1
+package sever
 
 import (
-	"GeekRPC/codec_day1/codec"
+	"GeekRPC/codec"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -52,6 +52,7 @@ func (server *Server) readRequestHeader(cc codec.Codec)(*codec.Header,error) {
 	return &h,nil
 }
 
+// 把cc中的信息解码后以request的形式返回
 func (server *Server) readRequest(cc codec.Codec)(*request,error) {
 	h,err := server.readRequestHeader(cc)
 	if err != nil {
@@ -69,6 +70,7 @@ func (server *Server) readRequest(cc codec.Codec)(*request,error) {
 	return req,nil
 }
 
+//把h和body的信息写进cc中
 func (server *Server) sendResponse(cc codec.Codec,h *codec.Header,body interface{},sending *sync.Mutex){
 	sending.Lock()
 	defer sending.Unlock()
@@ -77,6 +79,7 @@ func (server *Server) sendResponse(cc codec.Codec,h *codec.Header,body interface
 	}
 }
 
+//把req的信息加工添加一些内容后写进cc中
 func (server *Server) handleRequest(cc codec.Codec,req *request,sending *sync.Mutex,wg *sync.WaitGroup){
 	// TODO, should call registered rpc methods to get the right replyv
 	// day 1, just print argv and send a hello message
@@ -89,6 +92,9 @@ func (server *Server) handleRequest(cc codec.Codec,req *request,sending *sync.Mu
 
 var invalidRequest = struct{}{}
 
+//读取cc中的内容，
+//
+//加工添加一些额外信息进去后再写进cc中
 func (server *Server) serveCodec(cc codec.Codec) {
 	// Todo
 	sending := new(sync.Mutex)
@@ -112,6 +118,12 @@ func (server *Server) serveCodec(cc codec.Codec) {
 
 // ServeConn runs the server on a single connection.
 // ServeConn blocks, serving the connection until the client hangs up.
+//
+//读取conn，解码成option形式
+//
+//通过option检查magicNumber是否符合，以及确认编码方法CodecFunc
+//
+//通过CodecFunc对conn进行编码，传进serveCodec中，实现对信息的加工和返回
 func (server *Server) ServeConn(conn io.ReadWriteCloser) {
 	defer func(){
 		_ = conn.Close()
@@ -141,6 +153,7 @@ func (server *Server) ServeConn(conn io.ReadWriteCloser) {
 
 // Accept accepts connections on the listener and serves requests
 // for each incoming connection.
+//接收net.Listener返回的lis，通过lis.Accept()返回的conn,实现conn的编码解码以及处理信息后再写进conn中
 func (server *Server) Accept (lis net.Listener) {
 	for {
 		conn,err := lis.Accept()

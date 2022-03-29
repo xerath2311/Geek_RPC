@@ -1,7 +1,7 @@
-package codec_day1
+package sever
 
 import (
-	"GeekRPC/codec_day1/codec"
+	"GeekRPC/codec"
 	"encoding/json"
 	"fmt"
 	"log"
