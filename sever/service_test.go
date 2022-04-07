@@ -39,3 +39,15 @@ func TestNewService(t *testing.T) {
 	mType := s.method["Sum"]
 	_assert(mType != nil,"wrong Method,Sum shouldn't nil")
 }
+
+func TestOther(t *testing.T) {
+	arg := Args{
+		Num1: 1,
+		Num2: 2,
+	}
+	fmt.Println(reflect.ValueOf(arg).Type().Name())
+	fmt.Println(reflect.Indirect(reflect.ValueOf(arg)).Type().Name())
+	fmt.Println(reflect.TypeOf(arg).Name())
+
+
+}

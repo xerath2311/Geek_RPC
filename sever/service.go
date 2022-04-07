@@ -42,17 +42,17 @@ func (m *methodType) newReplyv() reflect.Value {
 }
 
 type service struct {
-	name string
-	typ reflect.Type
-	rcvr reflect.Value
-	method map[string]*methodType
+	name string  //映射的结构体的名称
+	typ reflect.Type  //结构体的类型
+	rcvr reflect.Value  //结构体的实例本身
+	method map[string]*methodType  //存储映射的结构体的所有符合条件的方法
 }
 
 // 创建service实例
 func newService(rcvr interface{}) *service {
 	s := new(service)
 	s.rcvr = reflect.ValueOf(rcvr)
-	s.name = reflect.Indirect(s.rcvr).Type().Name()
+	s.name = reflect.Indirect(s.rcvr).Type().Name() //如果rcvr是指针，s.rcvr.Type().Name()为空
 	s.typ = reflect.TypeOf(rcvr)
 	if !ast.IsExported(s.name) {
 		log.Fatalf("rpc server: %s is not a valid service name",s.name)
@@ -61,6 +61,7 @@ func newService(rcvr interface{}) *service {
 	return s
 }
 
+//遍历实例s的所有实现的方法，并将符合rpc规则的方法加入到s.method里面
 func (s *service) registerMethods() {
 	s.method = make(map[string]*methodType)
 	for i:=0;i<s.typ.NumMethod();i++{

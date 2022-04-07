@@ -21,18 +21,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2a7decb5-08bf-407b-9f8d-b9d19b966287" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/clien.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/clien.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/client_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/client_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec_day1/.idea/GeekRPC.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec_day1/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec_day1/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec_day1/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec_day1/codec/codec.go" beforeDir="false" afterPath="$PROJECT_DIR$/codec/codec.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec_day1/codec/gob.go" beforeDir="false" afterPath="$PROJECT_DIR$/codec/gob.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec_day1/codec/gob_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/codec/gob_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec_day1/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/codec_day1/server_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/server_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sever/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sever/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sever/service_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/service_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +37,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="C:/Program Files/Go" />
+  <component name="GOROOT" path="$PROJECT_DIR$/../../../../Program Files/Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -75,7 +66,7 @@
       <recent name="E:\goProgram\GeekRPC\sever" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Test.TestNewService in GeekRPC/sever">
+  <component name="RunManager" selected="Go Test.TestOther in GeekRPC/sever">
     <configuration name="TestClient_Call in GeekRPC/client (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="GeekRPC" />
       <working_directory value="$PROJECT_DIR$/client" />
@@ -96,17 +87,6 @@
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
       <pattern value="^\QTestMethodType_NumCalls\E$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestNewServer in GeekRPC/codec_day1" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="GeekRPC" />
-      <working_directory value="$PROJECT_DIR$/codec_day1" />
-      <framework value="gotest" />
-      <kind value="PACKAGE" />
-      <package value="GeekRPC/codec_day1" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <pattern value="^\QTestNewServer\E$" />
       <method v="2" />
     </configuration>
     <configuration name="TestNewServer in GeekRPC/sever" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
@@ -131,13 +111,24 @@
       <pattern value="^\QTestNewService\E$" />
       <method v="2" />
     </configuration>
+    <configuration name="TestOther in GeekRPC/sever" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="GeekRPC" />
+      <working_directory value="$PROJECT_DIR$/sever" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="GeekRPC/sever" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestOther\E$" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestOther in GeekRPC/sever" />
         <item itemvalue="Go Test.TestNewService in GeekRPC/sever" />
         <item itemvalue="Go Test.TestMethodType_NumCalls in GeekRPC/sever" />
         <item itemvalue="Go Test.TestNewServer in GeekRPC/sever" />
         <item itemvalue="Go Test.TestClient_Call in GeekRPC/client (1)" />
-        <item itemvalue="Go Test.TestNewServer in GeekRPC/codec_day1" />
       </list>
     </recent_temporary>
   </component>
@@ -170,22 +161,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1648434094968" />
-    <state width="865" height="140" key="GridCell.Tab.0.bottom" timestamp="1648548002575">
+    <state width="801" height="194" key="GridCell.Tab.0.bottom" timestamp="1649343139021">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="865" height="140" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1648548002575" />
-    <state width="865" height="140" key="GridCell.Tab.0.center" timestamp="1648548002575">
+    <state width="801" height="194" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1649343139021" />
+    <state width="801" height="194" key="GridCell.Tab.0.center" timestamp="1649343139021">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="865" height="140" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1648548002575" />
-    <state width="865" height="140" key="GridCell.Tab.0.left" timestamp="1648548002575">
+    <state width="801" height="194" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1649343139021" />
+    <state width="801" height="194" key="GridCell.Tab.0.left" timestamp="1649343139021">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="865" height="140" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1648548002575" />
-    <state width="865" height="140" key="GridCell.Tab.0.right" timestamp="1648548002575">
+    <state width="801" height="194" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1649343139021" />
+    <state width="801" height="194" key="GridCell.Tab.0.right" timestamp="1649343139021">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="865" height="140" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1648548002575" />
+    <state width="801" height="194" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1649343139021" />
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1648447318828">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
