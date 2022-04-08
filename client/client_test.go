@@ -17,7 +17,7 @@ func startServer(addr chan string) {
 	}
 	log.Println("start rpc server on",l.Addr())
 	addr <- l.Addr().String()
-	sever.Accept(l)
+	server.Accept(l)
 }
 
 func TestClient_Call(t *testing.T) {

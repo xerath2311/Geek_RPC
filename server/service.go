@@ -1,4 +1,4 @@
-package sever
+package server
 
 import (
 	"go/ast"
@@ -7,18 +7,18 @@ import (
 	"sync/atomic"
 )
 
-type methodType struct {
+type MethodType struct {
 	method reflect.Method
 	ArgType reflect.Type
 	ReplyType reflect.Type
 	numCalls uint64
 }
 
-func (m *methodType) NumCalls() uint64 {
+func (m *MethodType) NumCalls() uint64 {
 	return atomic.LoadUint64(&m.numCalls)
 }
 
-func (m *methodType) newArgv() reflect.Value {
+func (m *MethodType) newArgv() reflect.Value {
 	var argv reflect.Value
 	if m.ArgType.Kind() == reflect.Ptr {
 		//如果是指针，则argv也是指针
@@ -30,7 +30,7 @@ func (m *methodType) newArgv() reflect.Value {
 	return argv
 }
 
-func (m *methodType) newReplyv() reflect.Value {
+func (m *MethodType) newReplyv() reflect.Value {
 	replyv := reflect.New(m.ReplyType.Elem())
 	switch m.ReplyType.Elem().Kind() {
 	case reflect.Map:
@@ -41,29 +41,29 @@ func (m *methodType) newReplyv() reflect.Value {
 	return replyv
 }
 
-type service struct {
-	name string  //映射的结构体的名称
-	typ reflect.Type  //结构体的类型
-	rcvr reflect.Value  //结构体的实例本身
-	method map[string]*methodType  //存储映射的结构体的所有符合条件的方法
+type Service struct {
+	name string                   //映射的结构体的名称
+	typ reflect.Type              //结构体的类型
+	rcvr reflect.Value            //结构体的实例本身
+	method map[string]*MethodType //存储映射的结构体的所有符合条件的方法
 }
 
 // 创建service实例
-func newService(rcvr interface{}) *service {
-	s := new(service)
+func newService(rcvr interface{}) *Service {
+	s := new(Service)
 	s.rcvr = reflect.ValueOf(rcvr)
 	s.name = reflect.Indirect(s.rcvr).Type().Name() //如果rcvr是指针，s.rcvr.Type().Name()为空
 	s.typ = reflect.TypeOf(rcvr)
 	if !ast.IsExported(s.name) {
-		log.Fatalf("rpc server: %s is not a valid service name",s.name)
+		log.Fatalf("rpc server: %s is not a valid Service name",s.name)
 	}
 	s.registerMethods()
 	return s
 }
 
 //遍历实例s的所有实现的方法，并将符合rpc规则的方法加入到s.method里面
-func (s *service) registerMethods() {
-	s.method = make(map[string]*methodType)
+func (s *Service) registerMethods() {
+	s.method = make(map[string]*MethodType)
 	for i:=0;i<s.typ.NumMethod();i++{
 		method := s.typ.Method(i)
 		mType := method.Type
@@ -79,7 +79,7 @@ func (s *service) registerMethods() {
 			continue
 		}
 
-		s.method[method.Name] = &methodType{
+		s.method[method.Name] = &MethodType{
 			method: method,
 			ArgType: argType,
 			ReplyType: replyType,
@@ -92,7 +92,7 @@ func isExportedOrBuiltinType(t reflect.Type) bool {
 	return ast.IsExported(t.Name()) || t.PkgPath()== ""
 }
 
-func (s *service) call(m *methodType, argv, replyv reflect.Value) error {
+func (s *Service) call(m *MethodType, argv, replyv reflect.Value) error {
 	atomic.AddUint64(&m.numCalls,1)
 	f := m.method.Func
 	returnValues := f.Call([]reflect.Value{s.rcvr,argv,replyv})

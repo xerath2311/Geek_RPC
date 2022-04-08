@@ -1,13 +1,14 @@
-package sever
+package server
 
 import (
 	"fmt"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestMethodType_NumCalls(t *testing.T) {
-	mt := &methodType{numCalls: 23}
+	mt := &MethodType{numCalls: 23}
 	fmt.Println(mt.NumCalls())
 }
 
@@ -35,7 +36,7 @@ func TestNewService(t *testing.T) {
 
 	fmt.Println(T.Method(0).Name)
 	s := newService(&foo)
-	_assert(len(s.method)==1,"wrong service Method,expect 1,but got %d",len(s.method))
+	_assert(len(s.method)==1,"wrong Service Method,expect 1,but got %d",len(s.method))
 	mType := s.method["Sum"]
 	_assert(mType != nil,"wrong Method,Sum shouldn't nil")
 }
@@ -49,5 +50,21 @@ func TestOther(t *testing.T) {
 	fmt.Println(reflect.Indirect(reflect.ValueOf(arg)).Type().Name())
 	fmt.Println(reflect.TypeOf(arg).Name())
 
+}
 
+func TestSelect(t *testing.T) {
+	A := make(chan struct{})
+	B := make(chan struct{})
+	go func() {
+		A <- struct{}{}
+		time.Sleep(time.Second*2)
+		B <- struct{}{}
+	}()
+	select {
+	case <-A:
+		time.Sleep(time.Second*5)
+		fmt.Println("action A")
+	case <-B:
+		fmt.Println("acction B")
+	}
 }

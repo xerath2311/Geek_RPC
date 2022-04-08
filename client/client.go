@@ -4,6 +4,7 @@ import (
 
 	"GeekRPC/codec"
 	"GeekRPC/sever"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -29,7 +30,7 @@ func (call *Call) done() {
 
 type Client struct {
 	cc codec.Codec
-	opt *sever.Option
+	opt *server.Option
 	sending sync.Mutex
 	header codec.Header
 	mu sync.Mutex
@@ -42,6 +43,53 @@ type Client struct {
 var _ io.Closer = (*Client)(nil)
 
 var ErrShutdown = errors.New("connection is shut down")
+
+type clientResult struct {
+	client *Client
+	err error
+}
+
+type newClientFunc func(conn net.Conn,opt *server.Option)(client *Client,err error)
+
+func dialTimeout(f newClientFunc,network,address string,opts ...*server.Option)(client *Client,err error){
+	opt,err :=parseOption(opts...)
+	if err != nil {
+		return nil,err
+	}
+
+	conn,err := net.DialTimeout(network,address,opt.ConnectTimeout)
+	if err != nil {
+		return nil,err
+	}
+
+	defer func() {
+		if err != nil {
+			_ = conn.Close()
+		}
+	}()
+
+	ch := make(chan clientResult)
+	go func() {
+		client,err := f(conn,opt)
+		ch <- clientResult{client: client,err: err}
+	}()
+
+	if opt.ConnectTimeout == 0 {
+		result := <-ch
+		return result.client,result.err
+	}
+
+	select {
+	case <- time.After(opt.ConnectTimeout):
+		return nil,fmt.Errorf("rpc client: connect timeout: expect within %s",opt.ConnectTimeout)
+	case result := <-ch:
+		return result.client,result.err
+	}
+}
+
+func Dial(network,address string,opts ...*server.Option)(*Client,error) {
+	return dialTimeout(NewClient,network,address,opts...)
+}
 
 func (client *Client) Close() error {
 	client.mu.Lock()
@@ -141,7 +189,7 @@ func (client *Client) receive() {
 	client.terminateCalls(err)
 }
 
-func NewClient(conn net.Conn,opt *sever.Option) (*Client,error) {
+func NewClient(conn net.Conn,opt *server.Option) (*Client,error) {
 	f := codec.NewCodecFuncMap[opt.CodecType]
 	if f == nil {
 		err := fmt.Errorf("invalid codec type %s",opt.CodecType)
@@ -158,7 +206,7 @@ func NewClient(conn net.Conn,opt *sever.Option) (*Client,error) {
 	return newClientCodec(f(conn),opt),nil
 }
 
-func newClientCodec(cc codec.Codec,opt *sever.Option) *Client {
+func newClientCodec(cc codec.Codec,opt *server.Option) *Client {
 	client := &Client {
 		seq: 1,
 		cc: cc,
@@ -171,9 +219,9 @@ func newClientCodec(cc codec.Codec,opt *sever.Option) *Client {
 	return client
 }
 
-func parseOption(opts ...*sever.Option) (*sever.Option,error){
+func parseOption(opts ...*server.Option) (*server.Option,error){
 	if len(opts) == 0 || opts[0] == nil {
-		return sever.DefaultOption,nil
+		return server.DefaultOption,nil
 	}
 
 	if len(opts) != 1{
@@ -181,33 +229,33 @@ func parseOption(opts ...*sever.Option) (*sever.Option,error){
 	}
 
 	opt := opts[0]
-	opt.MagicNumber = sever.DefaultOption.MagicNumber
+	opt.MagicNumber = server.DefaultOption.MagicNumber
 	if opt.CodecType == "" {
-		opt.CodecType = sever.DefaultOption.CodecType
+		opt.CodecType = server.DefaultOption.CodecType
 	}
 
 	return opt,nil
 }
 
 // net.Dial(network,address),返回由conn和opts组成的client实例
-func Dial(network,address string,opts ...*sever.Option)(client *Client,err error){
-	opt,err := parseOption(opts...)
-	if err != nil {
-		return nil,err
-	}
-
-	conn,err := net.Dial(network,address)
-	if err != nil {
-		return nil,err
-	}
-
-	defer func(){
-		if client == nil {
-			_ = conn.Close()
-		}
-	}()
-	return NewClient(conn,opt)
-}
+//func Dial(network,address string,opts ...*sever.Option)(client *Client,err error){
+//	opt,err := parseOption(opts...)
+//	if err != nil {
+//		return nil,err
+//	}
+//
+//	conn,err := net.Dial(network,address)
+//	if err != nil {
+//		return nil,err
+//	}
+//
+//	defer func(){
+//		if client == nil {
+//			_ = conn.Close()
+//		}
+//	}()
+//	return NewClient(conn,opt)
+//}
 
 //解析call的信息，并发送给服务端
 func (client *Client) send(call *Call) {
@@ -253,7 +301,14 @@ func (client *Client) Go(serviceMethod string,args,reply interface{},done chan *
 }
 
 //调用client.Go产生的call，执行Done阻塞等待
-func (client *Client) Call(serviceMethod string,args,reply interface{}) error {
-	call := <- client.Go(serviceMethod,args,reply,make(chan *Call,1)).Done
-	return call.Error
+func (client *Client) Call(ctx context.Context,serviceMethod string,args,reply interface{}) error {
+	call := client.Go(serviceMethod,args,reply,make(chan *Call,1))
+
+	select {
+	case <- ctx.Done():
+		client.removeCall(call.Seq)
+		return errors.New("rpc client: call failed: "+ctx.Err().Error())
+	case call := <- call.Done:
+		return call.Error
+	}
 }
