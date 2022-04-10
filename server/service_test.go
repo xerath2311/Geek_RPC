@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"testing"
@@ -55,16 +56,32 @@ func TestOther(t *testing.T) {
 func TestSelect(t *testing.T) {
 	A := make(chan struct{})
 	B := make(chan struct{})
-	go func() {
-		A <- struct{}{}
+	ctx,cancel := context.WithCancel(context.Background())
+	go func(ctx context.Context) {
+		defer func() {
+			fmt.Println("gorutine exit")
+		}()
+
 		time.Sleep(time.Second*2)
+
+		select {
+		case A <- struct{}{}:
+		case <-ctx.Done():
+			fmt.Println("ctx done A")
+			return
+		}
+
+		fmt.Println("A")
 		B <- struct{}{}
-	}()
+		fmt.Println("B")
+	}(ctx)
 	select {
+	case <-time.After(time.Second):
+		fmt.Println("time after")
+		cancel()
+		time.Sleep(time.Second*2)
 	case <-A:
-		time.Sleep(time.Second*5)
-		fmt.Println("action A")
-	case <-B:
-		fmt.Println("acction B")
+		<-B
+		fmt.Println("action AB")
 	}
 }

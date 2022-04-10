@@ -3,7 +3,7 @@ package client
 import (
 
 	"GeekRPC/codec"
-	"GeekRPC/sever"
+	"GeekRPC/server"
 	"context"
 	"encoding/json"
 	"errors"
@@ -154,29 +154,28 @@ func (client *Client) terminateCalls(err error) {
 func (client *Client) receive() {
 	var err error
 	for err == nil {
-		log.Println("what happend ?")
 		var h codec.Header
-		t1 := time.Now()
+
 		if err = client.cc.ReadHeader(&h); err != nil {
 			break
 		}
-		log.Println(time.Since(t1).Seconds())
 
-		log.Println("what happend 111")
+
+
 		//处理该call，把call从client中清除
 		call := client.removeCall(h.Seq)
-		log.Println("what happend 222")
+
 		switch{
 		case call == nil:
-			log.Println("hello,anyone 111?")
+
 			err = client.cc.ReadBody(nil)
 		case h.Error != "":
-			log.Println("hello,anyone 222?")
+
 			call.Error = fmt.Errorf(h.Error)
 			err = client.cc.ReadBody(nil)
 			call.done()
 		default:
-			log.Println("hello,anyone 333?")
+
 			//这里的Reply是指针，当把conn的信息写进Reply时就已经把信息传递了出去
 			err = client.cc.ReadBody(call.Reply)
 			if err != nil {
